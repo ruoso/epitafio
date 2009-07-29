@@ -1,0 +1,54 @@
+Todas as tabelas trabalham com "Tempo Transacional", o que significa
+que as primary keys devem incluir os camos "tt_ini" and "tt_fim", de
+forma a que nenhum registro seja alterado, exceto ara definir a
+"tt_fim" para a data de quando o novo registro foi inserido.
+
+Neste arquivo serão listados apenas os aspectos temporais de "tempo
+válido", que informam a validade temporal das informações como nós as
+conhecemos em um determinado ponto do tempo. De forma que será
+possível navegar tanto no eixo que diz "ontem nós sabíamos de
+informação X" quanto "X começou a ser válido em data Y".
+
+Aspectos de "tempo válido":
+
+Cemitério:
+ Entidade Temporal
+
+Quadra:
+ Entidade Temporal
+ - relacionamento com cemitério atemporal
+
+Lote:
+ Entidade Temporal
+ - relacionamento com quadra atemporal
+
+Jazigo:
+ Entidade Temporal
+ - relacionamento com Lote atemporal
+ - relacionamento com óbito temporal, registrando o período em que um deterinado óbito esteve localizado em um determinado jazigo.
+ - relacionamento com sepultamento é atemporal, o sepultamento é um evento temporal por si.
+
+Obito:
+ Entidade Temporal Instantânea - registra-se apenas a data da ocorrencia
+ - relacionamento com jazigo temporal, ver jazigo
+ - relacionamento com sepultameto atemporal, o sepultamento é um evento temporal por si.
+ - relacionamento com exumação atemporal, a exumação é um evento temporal por si.
+ - relacionamento com cremação atemporal, a cremação é um evento temporal por si.
+
+Sepultamento:
+ Entidade Temporal Instantânea - registra-se apenas a data de ocorrencia
+ - relacionamento com exumação atemporal, uma exumação "encerra" um sepultamento
+ - relacionamento com jazigo atemporal, para mover um corpo é necessário fazer uma exumação
+ - relacionamento com obito atemporal.
+ 
+Exumação:
+ Entidade Temporal Instantânea - registra-se apenas a data de ocorrencia
+ - relacionamento com sepultamento atemporal, a exumação tem origem em um sepultamento
+ - relacionamento com sepultamento atemporal, a exumação pode ter como destino outro sepultamento
+ - relacionamento com cremacao atemporal, a exumação pode ter como destino uma cremação
+ - relacionamento com obito atemporal.
+
+Cremação:
+ Entidade Temporal Instantânea - registra-se apenas a data de ocorrência
+ - relacionamento com exumação atemporal, uma exumação pode ser a "origem" de uma cremação
+ - relacionamento com obito atemporal.
