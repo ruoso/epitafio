@@ -91,6 +91,9 @@ __PACKAGE__->has_many('quadras', 'Epitafio::DB::Quadra',
 __PACKAGE__->has_many('usuarios', 'Epitafio::DB::UsuarioFuncao',
                         { 'foreign.id_cemiterio' => 'self.id_cemiterio' });
 
+__PACKAGE__->belongs_to('autor', 'Epitafio::DB::Usuario',
+                        { 'foreign.matricula' => 'self.au_usr' });
+
 1;
 
 __END__
