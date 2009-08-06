@@ -35,6 +35,10 @@ __PACKAGE__->add_columns
    {
     data_type => 'char(20)',
    },
+   id_cemiterio =>
+   {
+    data_type => 'integer',
+   },
    vt_ini =>
    {
     data_type => 'timestamp with time zone',
@@ -58,7 +62,7 @@ __PACKAGE__->add_columns
   );
 
 
-__PACKAGE__->set_primary_key(qw(matricula codigo vt_ini tt_ini));
+__PACKAGE__->set_primary_key(qw(matricula codigo id_cemiterio vt_ini tt_ini));
 
 __PACKAGE__->belongs_to('usuario', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.matricula' });
@@ -66,8 +70,12 @@ __PACKAGE__->belongs_to('usuario', 'Epitafio::DB::Usuario',
 __PACKAGE__->belongs_to('funcao', 'Epitafio::DB::Funcao',
                         { 'foreign.codigo' => 'self.codigo' });
 
+__PACKAGE__->belongs_to('cemiterio', 'Epitafio::DB::Cemiterio',
+                        { 'foreign.id_cemiterio' => 'self.id_cemiterio' });
+
 __PACKAGE__->belongs_to('autor', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.au_usr' });
+
 
 1;
 
