@@ -39,6 +39,10 @@ __PACKAGE__->add_columns
    {
     data_type => 'varchar',
    },
+   ativo =>
+   {
+    data_type => 'boolean',
+   },
   );
 
 
