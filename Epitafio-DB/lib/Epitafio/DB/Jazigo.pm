@@ -75,6 +75,9 @@ __PACKAGE__->belongs_to('lote', 'Epitafio::DB::Lote',
 __PACKAGE__->has_many('obitos', 'Epitafio::DB::ObitoJazigo',
                         { 'foreign.id_jazigo' => 'self.id_jazigo' });
 
+__PACKAGE__->has_many('sepultamentos', 'Epitafio::DB::Sepultamento',
+                        { 'foreign.id_jazigo' => 'self.id_jazigo' });
+
 __PACKAGE__->belongs_to('autor', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.au_usr' });
 
