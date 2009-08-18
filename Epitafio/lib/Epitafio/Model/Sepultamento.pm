@@ -8,7 +8,8 @@ txn_method 'sepultar' => authorized 'operacao' => sub {
   # implement model logic here.
 };
 
-txn_method 'search' => authorized 'operacao' =>
-  rs_handled => ('Sepultamento' => 'search');
+txn_method $_ => authorized 'operacao' =>
+  rs_handled => ('Sepultamento' => $_) for qw(search find all);
+
 
 1;
