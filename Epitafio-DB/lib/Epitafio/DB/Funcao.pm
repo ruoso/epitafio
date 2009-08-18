@@ -38,7 +38,7 @@ __PACKAGE__->add_columns
   );
 
 
-__PACKAGE__->set_primary_key(qw(matricula));
+__PACKAGE__->set_primary_key(qw(codigo));
 
 __PACKAGE__->has_many('usuarios', 'Epitafio::DB::UsuarioFuncao',
                         { 'foreign.codigo' => 'self.codigo' });

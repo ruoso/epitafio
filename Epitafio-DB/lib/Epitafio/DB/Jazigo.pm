@@ -51,7 +51,7 @@ __PACKAGE__->add_columns
    au_usr =>
    {
     data_type => 'char(15)',
-   }
+   },
    id_lote =>
    {
     data_type => 'integer',

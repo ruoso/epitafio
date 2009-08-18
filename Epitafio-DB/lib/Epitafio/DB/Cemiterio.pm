@@ -51,7 +51,7 @@ __PACKAGE__->add_columns
    au_usr =>
    {
     data_type => 'char(15)',
-   }
+   },
    razao_social =>
    {
     data_type => 'varchar',

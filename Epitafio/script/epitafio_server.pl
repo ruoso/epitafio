@@ -12,6 +12,7 @@ use Getopt::Long;
 use Pod::Usage;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
+use lib "$FindBin::Bin/../../Epitafio-DB/lib";
 
 my $debug             = 0;
 my $fork              = 0;
