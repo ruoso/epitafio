@@ -3,8 +3,11 @@ use strict;
 use warnings;
 use base 'Exporter';
 
-our @EXPORT = qw(txn_method authorized rs_handled);
+our @EXPORT = qw(txn_method authorized rs_handled now);
 
+sub now {
+  DateTime->now();
+}
 
 sub txn_method {
   my ($name, $code) = @_;
