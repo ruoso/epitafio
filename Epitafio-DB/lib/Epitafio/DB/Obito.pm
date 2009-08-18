@@ -48,6 +48,10 @@ __PACKAGE__->add_columns
    {
     data_type => 'char(15)',
    },
+   id_cemiterio =>
+   {
+    data_type => 'integer',
+   },
    nome =>
    {
     data_type => 'varchar',
@@ -126,6 +130,9 @@ __PACKAGE__->has_many('remocoes', 'Epitafio::DB::Remocao',
 
 __PACKAGE__->belongs_to('autor', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.au_usr' });
+
+__PACKAGE__->belongs_to('cemiterio', 'Epitafio::DB::Cemiterio',
+                        { 'foreign.id_cemiterio' => 'self.id_cemiterio' });
 
 1;
 

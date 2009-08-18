@@ -48,6 +48,10 @@ __PACKAGE__->add_columns
    {
     data_type => 'char(15)',
    },
+   id_cemiterio =>
+   {
+    data_type => 'integer',
+   },
    id_obito =>
    {
     data_type => 'integer',
@@ -100,6 +104,9 @@ __PACKAGE__->might_have('cremacao_destino', 'Epitafio::DB::Cremacao',
 
 __PACKAGE__->might_have('remocao_destino', 'Epitafio::DB::Remocao',
                         { 'foreign.id_remocao' => 'self.id_remocao_destino' });
+
+__PACKAGE__->belongs_to('cemiterio', 'Epitafio::DB::Cemiterio',
+                        { 'foreign.id_cemiterio' => 'self.id_cemiterio' });
 
 1;
 

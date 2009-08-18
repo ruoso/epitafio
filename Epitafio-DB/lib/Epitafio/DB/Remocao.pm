@@ -52,6 +52,10 @@ __PACKAGE__->add_columns
    {
     data_type => 'integer',
    },
+   id_cemiterio =>
+   {
+    data_type => 'integer',
+   },
    matr_responsavel =>
    {
     data_type => 'char(15)',
@@ -92,6 +96,9 @@ __PACKAGE__->belongs_to('autor', 'Epitafio::DB::Usuario',
 
 __PACKAGE__->might_have('encerrando', 'Epitafio::DB::Exumacao',
                         { 'foreign.id_remocao_destino' => 'self.id_remocao' });
+
+__PACKAGE__->belongs_to('cemiterio', 'Epitafio::DB::Cemiterio',
+                        { 'foreign.id_cemiterio' => 'self.id_cemiterio' });
 
 1;
 
