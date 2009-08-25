@@ -104,5 +104,37 @@ txn_method 'sepultar' => authorized 'operacao' => sub {
 
 };
 
+=item jazigos_disponiveis
+
+Este método irá buscar uma lista de jazigos vagos, pela órdem da data
+em que o último óbito foi exumado, ou que nunca tenham recebido nenhum
+óbito. Esta lista não implica uma reserva, o escalonamento em si ainda
+depende de atividade humana.
+
+Não recebe nenhum parâmetro e retorna uma lista.
+
+=cut
+
+txn_method 'jazigos_disponiveis' => readonly authorized 'operacao' => sub {
+  my $self = shift;
+
+  # datetime de referencia.
+  my $ref_time = now;
+
+  $self->dbic->resultset('Jazigo')->search
+    ({ 'tt_ini' => { '<=' => $ref_time },
+       'tt_fim' => { '>' => $ref_time },
+       'obitos.tt_ini' => { '<=' => $ref_time },
+       'obitos.tt_fim' => { '>' => $ref_time },
+     { join => 'obitos' },
+       group_by => [qw(id_jazigo vt_ini vt_fim tt_ini tt_fim
+                       au_usr id_lote identificador tipo)],
+       '+select' => [\"MAX(CASE WHEN obitos.vt_ini IS NULL THEN -1 ELSE obitos.vt_ini END)"],
+       '+as' => ['ultimo_sepultamento'],
+       'order_by' => 'ultimo_sepultamento',
+       'rows' => 10,
+     })->all;
+
+};
 
 1;
