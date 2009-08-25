@@ -129,7 +129,7 @@ txn_method 'jazigos_disponiveis' => readonly authorized 'operacao' => sub {
      { join => 'obitos' },
        group_by => [qw(id_jazigo vt_ini vt_fim tt_ini tt_fim
                        au_usr id_lote identificador tipo)],
-       '+select' => [\"MAX(CASE WHEN obitos.vt_ini IS NULL THEN -1 ELSE obitos.vt_ini END)"],
+       '+select' => [\"MAX(CASE WHEN obitos.vt_fim IS NULL THEN -1 ELSE obitos.vt_fim END)"],
        '+as' => ['ultimo_sepultamento'],
        'order_by' => 'ultimo_sepultamento',
        'rows' => 10,
