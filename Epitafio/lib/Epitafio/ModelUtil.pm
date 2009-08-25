@@ -18,6 +18,18 @@ sub txn_method {
   };
 }
 
+sub readonly {
+  my ($code) = @_;
+  sub {
+    $_[0]->dbic->storage->dbh_do
+      (sub {
+         my ($storage, $dbh) = @_;
+         $dbh->do('SET TRANSACTION READ ONLY');
+       });
+    $code->(@_);
+  }
+}
+
 sub authorized {
   my ($role, $code) = @_;
   return sub {
