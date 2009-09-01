@@ -168,7 +168,44 @@ erro).
 txn_method 'desfazer_depultamento' => authorized 'supervisor' => sub {
   my ($self, $id_sepultamento) = @_;
 
+  my $ref_time = now;
+
+  my $sepultamento = $self->cemiterio->sepultamentos
+    ->find({ tt_ini => { '<=' => $ref_time },
+             tt_fim => { '>' => $ref_time },
+             id_sepultamento => $id_sepultamento })
+      or die 'Sepultamento não encontrado';
+
+  # Vamos encontrar o óbito desse sepultamento.
+  my $obito = $sepultamento->obito
+    ->find({ tt_ini => { '<=' => $ref_time },
+             tt_fim => { '>' => $ref_time }})
+      or die 'Inconsistência no banco';
+
+  # Vamos encontrar o jazigo onde o sepultamento foi realizado.
+  my $jazigo = $sepultamento->jazigo
+    ->find({ tt_ini => { '<=' => $ref_time },
+             tt_fim => { '>' => $ref_time },
+             vt_ini => { '<=' => $ref_time },
+             vt_fim => { '>' => $ref_time }})
+      or die 'Inconsistência no banco';
+
   
+
+
+  # Vamos ver se esse sepultamento encerra uma exumação.
+  my $exumacao = $sepultamento->encerrando
+    ->find({ tt_ini => { '<=' => $ref_time },
+             tt_fim => { '>' => $ref_time }});
+
+  if ($exumacao) {
+    # temos que reabrir essa exumação
+    $exumacao->update({ tt_fim => $ref_time });
+    $exumacao->create({ tt_ini => $ref_time,
+                        tt_fim => 'infinity',
+                        id_sepultamento_destino => undef });
+  }
+
 }
 
 1;
