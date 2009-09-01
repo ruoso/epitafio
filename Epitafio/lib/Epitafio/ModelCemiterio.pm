@@ -21,7 +21,16 @@ sub build_per_context_instance {
     # Aproveitamos para guardar isso na sessão.
     my %cemiterios =
       map { $_->cemiterio->id_cemiterio => 1 }
-        $c->user->obj->funcoes->search({},{ prefetch => 'cemiterio' })->all;
+        $c->user->obj->funcoes
+          ->search({ 'me.tt_ini' => { '<=' => $rt },
+                     'me.tt_fim' => { '>' => $rt },
+                     'me.vt_ini' => { '<=' => $rt },
+                     'me.vt_fim' => { '>' => $rt },
+                     'cemiterio.tt_ini' => { '<=' => $rt },
+                     'cemiterio.tt_fim' => { '>' => $rt },
+                     'cemiterio.vt_ini' => { '<=' => $rt },
+                     'cemiterio.vt_fim' => { '>' => $rt }},
+                   { prefetch => 'cemiterio' })->all;
     if ((keys %cemiterio) == 1) {
       ($id_cemiterio) = keys %cemiterio;
       $c->session->{id_cemiterio} = $id_cemiterio;
@@ -31,7 +40,12 @@ sub build_per_context_instance {
   }
 
   my $cemiterio = $c->model('DB::Cemiterio')
-    ->find({ id_cemiterio => $id_cemiterio });
+    ->find({ id_cemiterio => $id_cemiterio,
+             tt_ini => { '<=' => $rt },
+             tt_fim => { '>' => $rt },
+             vt_ini => { '<=' => $rt },
+             vt_fim => { '>' => $rt }})
+      or die 'Cemiterio não encontrado';
 
   $self->new(user => $c->user->obj,
              dbic => $c->model('DB')->schema->restrict_with_object($c->user->obj),
