@@ -82,7 +82,7 @@ __PACKAGE__->add_columns
   );
 
 
-__PACKAGE__->set_primary_key(qw(id_exumacao vt_reg tt_ini));
+__PACKAGE__->set_primary_key(qw(id_exumacao tt_ini));
 
 __PACKAGE__->belongs_to('obito', 'Epitafio::DB::Obito',
                         { 'foreign.id_obito' => 'self.id_obito' });

@@ -85,11 +85,13 @@ __PACKAGE__->add_columns
 
 __PACKAGE__->set_primary_key(qw(id_cemiterio vt_ini tt_ini));
 
-__PACKAGE__->has_many('quadras', 'Epitafio::DB::Quadra',
-                        { 'foreign.id_cemiterio' => 'self.id_cemiterio' });
-
-__PACKAGE__->has_many('usuarios', 'Epitafio::DB::UsuarioFuncao',
-                        { 'foreign.id_cemiterio' => 'self.id_cemiterio' });
+__PACKAGE__->has_many('quadras', 'Epitafio::DB::Quadra', 'id_cemiterio');
+__PACKAGE__->has_many('usuarios', 'Epitafio::DB::UsuarioFuncao', 'id_cemiterio');
+__PACKAGE__->has_many('obitos', 'Epitafio::DB::Obito', 'id_cemiterio');
+__PACKAGE__->has_many('sepultamentos', 'Epitafio::DB::Sepultamento', 'id_cemiterio');
+__PACKAGE__->has_many('cremacoes', 'Epitafio::DB::Cremacao', 'id_cemiterio');
+__PACKAGE__->has_many('remocoes', 'Epitafio::DB::Remocao', 'id_cemiterio');
+__PACKAGE__->has_many('exumacoes', 'Epitafio::DB::Exumacao', 'id_cemiterio');
 
 __PACKAGE__->belongs_to('autor', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.au_usr' });

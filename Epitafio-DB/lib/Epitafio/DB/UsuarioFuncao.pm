@@ -38,6 +38,7 @@ __PACKAGE__->add_columns
    id_cemiterio =>
    {
     data_type => 'integer',
+    is_nullable => 1,
    },
    vt_ini =>
    {

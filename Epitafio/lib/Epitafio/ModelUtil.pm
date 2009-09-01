@@ -33,10 +33,35 @@ sub readonly {
 sub authorized {
   my ($role, $code) = @_;
   return sub {
-    if ($_[0]->user->in_role($role)) {
-      $code->(@_);
+    my $rt = now;
+    if ($_[0]->isa('Epitafio::ModelCemiterio')) {
+      # no caso de ser um ModelCemiterio, significa que temos que ver
+      # se ele tem essa função nesse cemitério.
+      if ($_[0]->cemiterio->usuarios
+          ->find({ matricula => $_[0]->user->matricula,
+                   tt_ini => { '<=' => $rt },
+                   tt_fim => { '>' => $rt },
+                   vt_ini => { '<=' => $rt },
+                   vt_fim => { '>' => $rt },
+                   codigo => $role })) {
+        $code->(@_);
+      } else {
+        die 'Access Denied!';
+      }
     } else {
-      die 'Access Denied!';
+      # as roles que não são específicas a cemitério devem ser
+      # registradas sem associação com o cemitério
+      if ($_[0]->user->funcoes
+          ->find({ tt_ini => { '<=' => $rt },
+                   tt_fim => { '>' => $rt },
+                   vt_ini => { '<=' => $rt ],
+                   vt_fim => { '>' => $rt },
+                   codigo => $role,
+                   id_cemiterio => undef })) {
+        $code->(@_);
+      } else {
+        die 'Access Denied!';
+      }
     }
   }
 }

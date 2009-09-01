@@ -111,7 +111,7 @@ __PACKAGE__->add_columns
   );
 
 
-__PACKAGE__->set_primary_key(qw(id_obito vt_reg tt_ini));
+__PACKAGE__->set_primary_key(qw(id_obito tt_ini));
 
 __PACKAGE__->has_many('jazigos', 'Epitafio::DB::ObitoJazigo',
                         { 'foreign.id_obito' => 'self.id_obito' });

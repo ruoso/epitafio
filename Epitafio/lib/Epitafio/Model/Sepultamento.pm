@@ -2,7 +2,7 @@ package Epitafio::Model::Sepultamento;
 use Epitafio::ModelUtil;
 use Moose;
 use utf8;
-extends 'Epitafio::Model';
+extends 'Epitafio::ModelCemiterio';
 
 =over
 
@@ -20,7 +20,7 @@ txn_method 'sepultar' => authorized 'operacao' => sub {
   my $ref_time = now;
 
   # primeiro precisamos localizar o óbito referido.
-  my $obito = $self->dbic->resultset('Obito')
+  my $obito = $self->cemiterio->obitos
     ->find({ tt_ini => { '<=' => $ref_time },
              tt_fim => { '>' => $ref_time },
              id_obito => $dados->{id_obito} })
@@ -41,8 +41,8 @@ txn_method 'sepultar' => authorized 'operacao' => sub {
   # também precisamos ver se esse óbito não tem um sepultamento não
   # exumado.
   $obito->sepultamentos
-    ->find({ tt_ini => { '<=' => $ref_time },
-             tt_fim => { '>' => $ref_time },
+    ->find({ 'me.tt_ini' => { '<=' => $ref_time },
+             'me.tt_fim' => { '>' => $ref_time },
              'exumacao.tt_ini' => { '<=' => $ref_time },
              'exumacao.tt_fim' => { '>' => $ref_time },
              'exumacao.id_exumacao' => undef },
@@ -51,9 +51,11 @@ txn_method 'sepultar' => authorized 'operacao' => sub {
 
   # antes de sepultar, vamos localizar o jazigo.
   my $jazigo = $self->dbic->resultset('Jazigo')
-    ->find({ tt_ini => { '<=' => $ref_time },
-             tt_fim => { '>' => $ref_time },
-             id_jazigo => $dados->{id_jazigo} })
+    ->find({ 'me.tt_ini' => { '<=' => $ref_time },
+             'me.tt_fim' => { '>' => $ref_time },
+             'me.id_jazigo' => $dados->{id_jazigo},
+             'cemiterio.id_cemiterio' => $self->cemiterio->id_cemiterio },
+           { join => { lote => { quadra => 'cemiterio' }}})
       || die 'Jazigo não encontrado';
 
   # vamos ver se o jazigo está realmente vago
@@ -122,11 +124,26 @@ txn_method 'jazigos_disponiveis' => readonly authorized 'operacao' => sub {
   my $ref_time = now;
 
   $self->dbic->resultset('Jazigo')->search
-    ({ 'tt_ini' => { '<=' => $ref_time },
-       'tt_fim' => { '>' => $ref_time },
+    ({ 'me.tt_ini' => { '<=' => $ref_time },
+       'me.tt_fim' => { '>' => $ref_time },
+       'me.vt_ini' => { '<=' => $ref_time },
+       'me.vt_fim' => { '>' => $ref_time },
        'obitos.tt_ini' => { '<=' => $ref_time },
        'obitos.tt_fim' => { '>' => $ref_time },
-     { join => 'obitos' },
+       'lote.tt_ini' => { '<=' => $ref_time },
+       'lote.tt_fim' => { '>' => $ref_time },
+       'lote.vt_ini' => { '<=' => $ref_time },
+       'lote.vt_fim' => { '>' => $ref_time },
+       'quadra.tt_ini' => { '<=' => $ref_time },
+       'quadra.tt_fim' => { '>' => $ref_time },
+       'quadra.vt_ini' => { '<=' => $ref_time },
+       'quadra.vt_fim' => { '>' => $ref_time },
+       'cemiterio.tt_ini' => { '<=' => $ref_time },
+       'cemiterio.tt_fim' => { '>' => $ref_time },
+       'cemiterio.vt_ini' => { '<=' => $ref_time },
+       'cemiterio.vt_fim' => { '>' => $ref_time },
+       'cemiterio.id_cemiterio' => $self->cemiterio->id_cemiterio, },
+     { join => ['obitos',{ lote => { quadra => 'cemiterio' }}],
        group_by => [qw(id_jazigo vt_ini vt_fim tt_ini tt_fim
                        au_usr id_lote identificador tipo)],
        '+select' => [\"MAX(CASE WHEN obitos.vt_fim IS NULL THEN -1 ELSE obitos.vt_fim END)"],
@@ -136,5 +153,22 @@ txn_method 'jazigos_disponiveis' => readonly authorized 'operacao' => sub {
      })->all;
 
 };
+
+=item desfazer_sepultamento
+
+Este método deve ser chamado para desfazer o registro de um
+sepultamento. Isso significa que o registro foi feito de maneira
+incorreta, e que precisa ser desfeito para ser lançado corretamente.
+
+Recebe o id do sepultamento, e não retorna nada (vai morrer em caso de
+erro).
+
+=cut
+
+txn_method 'desfazer_depultamento' => authorized 'supervisor' => sub {
+  my ($self, $id_sepultamento) = @_;
+
+  
+}
 
 1;

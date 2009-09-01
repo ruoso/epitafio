@@ -63,7 +63,7 @@ __PACKAGE__->add_columns
   );
 
 
-__PACKAGE__->set_primary_key(qw(id_sepultamento vt_reg tt_ini));
+__PACKAGE__->set_primary_key(qw(id_sepultamento tt_ini));
 
 __PACKAGE__->belongs_to('jazigo', 'Epitafio::DB::Jazigo',
                         { 'foreign.id_jazigo' => 'self.id_jazigo' });
