@@ -165,7 +165,7 @@ erro).
 
 =cut
 
-txn_method 'desfazer_depultamento' => authorized 'supervisor' => sub {
+txn_method 'desfazer_sepultamento' => authorized 'supervisao' => sub {
   my ($self, $id_sepultamento) = @_;
 
   my $ref_time = now;
@@ -176,11 +176,14 @@ txn_method 'desfazer_depultamento' => authorized 'supervisor' => sub {
              id_sepultamento => $id_sepultamento })
       or die 'Sepultamento não encontrado';
 
+  # vamos invalidar o sepultamento
+  $sepultamento->update({ tt_fim => $ref_time });
+
   # Vamos encontrar o óbito desse sepultamento.
   my $obito = $sepultamento->obito
     ->find({ tt_ini => { '<=' => $ref_time },
              tt_fim => { '>' => $ref_time }})
-      or die 'Inconsistência no banco';
+      or die 'Inconsistência no banco: obito';
 
   # Vamos encontrar o jazigo onde o sepultamento foi realizado.
   my $jazigo = $sepultamento->jazigo
@@ -188,10 +191,21 @@ txn_method 'desfazer_depultamento' => authorized 'supervisor' => sub {
              tt_fim => { '>' => $ref_time },
              vt_ini => { '<=' => $ref_time },
              vt_fim => { '>' => $ref_time }})
-      or die 'Inconsistência no banco';
+      or die 'Inconsistência no banco: jazigo';
 
-  
+  # Agora vamos remover a associação entre o jazigo e o óbito
+  my $jazob = $jazigo->obitos
+    ->find({ tt_ini => { '<=' => $ref_time },
+             tt_fim => { '>' => $ref_time },
+             vt_ini => { '<=' => $ref_time },
+             vt_fim => { '>' => $ref_time },
+             id_obito => $obito->id_obito })
+      or die 'Inconsistencia no banco: obitojazigo';
 
+  $jazob->update({ tt_fim => $ref_time });
+  $jazob->copy({ tt_ini => $ref_time,
+                 tt_fim => 'infinity',
+                 vt_fim => $ref_time });
 
   # Vamos ver se esse sepultamento encerra uma exumação.
   my $exumacao = $sepultamento->encerrando
@@ -201,9 +215,10 @@ txn_method 'desfazer_depultamento' => authorized 'supervisor' => sub {
   if ($exumacao) {
     # temos que reabrir essa exumação
     $exumacao->update({ tt_fim => $ref_time });
-    $exumacao->create({ tt_ini => $ref_time,
-                        tt_fim => 'infinity',
-                        id_sepultamento_destino => undef });
+    $exumacao->copy({ id_exumacao => $exumacao->id_exumacao,
+                      tt_ini => $ref_time,
+                      tt_fim => 'infinity',
+                      id_sepultamento_destino => undef });
   }
 
 }
