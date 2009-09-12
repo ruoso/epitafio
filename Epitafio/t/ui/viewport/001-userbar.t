@@ -43,6 +43,7 @@ is_deeply([$userbar->current_events], [qw(logout login help contact)]);
 is($userbar->name, 'John Doe');
 ok($userbar->logout);
 
+ok(!$identity);
 ok(!$userbar->identity);
 ok(!$userbar->logout);
 ok(!$userbar->name);
