@@ -19,9 +19,9 @@ package Epitafio::DB::Exumacao;
 # título "LICENCA.txt", junto com este programa, se não, escreva para a
 # Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
 
-use strict;
-use warnings;
-use base qw(DBIx::Class);
+use Reaction::Class;
+BEGIN { extends 'DBIx::Class' }
+use namespace::autoclean;
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime PK::Auto Core));
 __PACKAGE__->table('exumacao');
@@ -84,26 +84,74 @@ __PACKAGE__->add_columns
 
 __PACKAGE__->set_primary_key(qw(id_exumacao tt_ini));
 
+has obito => (
+    isa => 'Epitafio::DB::Obito',
+    is => 'rw',
+    required => 1
+);
+
 __PACKAGE__->belongs_to('obito', 'Epitafio::DB::Obito',
                         { 'foreign.id_obito' => 'self.id_obito' });
+
+has responsavel => (
+    isa => 'Epitafio::DB::Usuario',
+    is => 'rw',
+    required => 1
+);
 
 __PACKAGE__->belongs_to('responsavel', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.matr_responsavel' });
 
+has autor => (
+    isa => 'Epitafio::DB::Usuario',
+    is => 'rw',
+    required => 1
+);
+
 __PACKAGE__->belongs_to('autor', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.au_usr' });
+
+has origem => (
+    isa => 'Epitafio::DB::Sepultamento',
+    is => 'rw',
+    required => 1
+);
 
 __PACKAGE__->belongs_to('origem', 'Epitafio::DB::Sepultamento',
                         { 'foreign.id_sepultamento' => 'self.id_sepultamento_origem' });
 
+has sepultamento => (
+    isa => 'Epitafio::DB::Sepultamento',
+    is => 'rw',
+    required => 1
+);
+
 __PACKAGE__->might_have('sepultamento_destino', 'Epitafio::DB::Sepultamento',
                         { 'foreign.id_sepultamento' => 'self.id_sepultamento_destino' });
+
+has cremacao_destino => (
+    isa => 'Epitafio::DB::Cremacao',
+    is => 'rw',
+    required => 0
+);
 
 __PACKAGE__->might_have('cremacao_destino', 'Epitafio::DB::Cremacao',
                         { 'foreign.id_cremacao' => 'self.id_cremacao_destino' });
 
+has remocao => (
+    isa => 'Epitafio::DB::Remocao',
+    is => 'rw',
+    required => 0
+);
+
 __PACKAGE__->might_have('remocao_destino', 'Epitafio::DB::Remocao',
                         { 'foreign.id_remocao' => 'self.id_remocao_destino' });
+
+has cemiterio => (
+    isa => 'Epitafio::DB::Cemiterio',
+    is => 'rw',
+    required => 1
+);
 
 __PACKAGE__->belongs_to('cemiterio', 'Epitafio::DB::Cemiterio',
                         { 'foreign.id_cemiterio' => 'self.id_cemiterio' });

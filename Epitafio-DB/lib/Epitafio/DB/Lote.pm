@@ -19,9 +19,9 @@ package Epitafio::DB::Lote;
 # título "LICENCA.txt", junto com este programa, se não, escreva para a
 # Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
 
-use strict;
-use warnings;
-use base qw(DBIx::Class);
+use Reaction::Class;
+BEGIN { extends 'DBIx::Class' }
+use namespace::autoclean;
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime PK::Auto Core));
 __PACKAGE__->table('lote');
@@ -65,11 +65,28 @@ __PACKAGE__->add_columns
 
 __PACKAGE__->set_primary_key(qw(id_lote vt_ini tt_ini));
 
+has quadra => (
+    isa => 'Epitafio::DB::Quadra',
+    is => 'rw',
+    required => 1
+);
+
 __PACKAGE__->belongs_to('quadra', 'Epitafio::DB::Quadra',
                         { 'foreign.id_quadra' => 'self.id_quadra' });
 
+has jazigos => (
+    isa => 'ArrayRef',
+    reader => { get_jazigos => sub {[$_[0]->jazigos_rs->all]} }
+);
+
 __PACKAGE__->has_many('jazigos', 'Epitafio::DB::Jazigo',
                         { 'foreign.id_lote' => 'self.id_lote' });
+
+has autor => (
+    isa => 'Epitafio::DB::Usuario',
+    is => 'rw',
+    required => 1
+);
 
 __PACKAGE__->belongs_to('autor', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.au_usr' });

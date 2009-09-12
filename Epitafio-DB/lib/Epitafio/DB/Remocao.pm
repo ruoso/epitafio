@@ -19,9 +19,9 @@ package Epitafio::DB::Remocao;
 # título "LICENCA.txt", junto com este programa, se não, escreva para a
 # Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
 
-use strict;
-use warnings;
-use base qw(DBIx::Class);
+use Reaction::Class;
+BEGIN { extends 'DBIx::Class' }
+use namespace::autoclean;
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime PK::Auto Core));
 __PACKAGE__->table('remocao');
@@ -85,17 +85,47 @@ __PACKAGE__->add_columns
 
 __PACKAGE__->set_primary_key(qw(id_remocao tt_ini));
 
+has obito => (
+    isa => 'Epitafio::DB::Obito',
+    is => 'rw',
+    required => 1
+);
+
 __PACKAGE__->belongs_to('obito', 'Epitafio::DB::Obito',
                         { 'foreign.id_obito' => 'self.id_obito' });
+
+has responsavel => (
+    isa => 'Epitafio::DB::Usuario',
+    is => 'rw',
+    required => 1
+);
 
 __PACKAGE__->belongs_to('responsavel', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.matr_responsavel' });
 
+has autor => (
+    isa => 'Epitafio::DB::Usuario',
+    is => 'rw',
+    required => 1
+);
+
 __PACKAGE__->belongs_to('autor', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.au_usr' });
 
+has encerrando => (
+    isa => 'Epitafio::DB::Exumacao',
+    is => 'rw',
+    required => 0
+);
+
 __PACKAGE__->might_have('encerrando', 'Epitafio::DB::Exumacao',
                         { 'foreign.id_remocao_destino' => 'self.id_remocao' });
+
+has cemiterio => (
+    isa => 'Epitafio::DB::Cemiterio',
+    is => 'rw',
+    required => 1
+);
 
 __PACKAGE__->belongs_to('cemiterio', 'Epitafio::DB::Cemiterio',
                         { 'foreign.id_cemiterio' => 'self.id_cemiterio' });

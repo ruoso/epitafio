@@ -19,9 +19,9 @@ package Epitafio::DB::UsuarioFuncao;
 # título "LICENCA.txt", junto com este programa, se não, escreva para a
 # Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
 
-use strict;
-use warnings;
-use base qw(DBIx::Class);
+use Reaction::Class;
+BEGIN { extends 'DBIx::Class' }
+use namespace::autoclean;
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime PK::Auto Core));
 __PACKAGE__->table('usuariofuncao');

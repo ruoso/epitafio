@@ -19,9 +19,9 @@ package Epitafio::DB::Quadra;
 # título "LICENCA.txt", junto com este programa, se não, escreva para a
 # Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
 
-use strict;
-use warnings;
-use base qw(DBIx::Class);
+use Reaction::Class;
+BEGIN { extends qw(DBIx::Class) }
+use namespace::autoclean;
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime PK::Auto Core));
 __PACKAGE__->table('quadra');
@@ -65,11 +65,29 @@ __PACKAGE__->add_columns
 
 __PACKAGE__->set_primary_key(qw(id_quadra vt_ini tt_ini));
 
+has cemiterio => (
+    isa => 'Epitafio::DB::Cemiterio',
+    is => 'rw',
+    required => 1
+);
+
 __PACKAGE__->belongs_to('cemiterio', 'Epitafio::DB::Cemiterio',
                         { 'foreign.id_cemiterio' => 'self.id_cemiterio' });
 
+has lotes => (
+    isa => 'ArrayRef',
+    reader => { get_lotes => sub {[$_[0]->lotes_rs->all]} },
+    required => 1
+);
+
 __PACKAGE__->has_many('lotes', 'Epitafio::DB::Lote',
                         { 'foreign.id_quadra' => 'self.id_quadra' });
+
+has autor => (
+    isa => 'Epitafio::DB::Usuario',
+    is => 'rw',
+    required => 1
+);
 
 __PACKAGE__->belongs_to('autor', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.au_usr' });

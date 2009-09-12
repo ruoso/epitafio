@@ -19,9 +19,9 @@ package Epitafio::DB::Jazigo;
 # título "LICENCA.txt", junto com este programa, se não, escreva para a
 # Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
 
-use strict;
-use warnings;
-use base qw(DBIx::Class);
+use Reaction::Class;
+BEGIN { extends qw(DBIx::Class) }
+use namespace::autoclean;
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime PK::Auto Core));
 __PACKAGE__->table('jazigo');
@@ -69,14 +69,36 @@ __PACKAGE__->add_columns
 
 __PACKAGE__->set_primary_key(qw(id_jazigo vt_ini tt_ini));
 
+has lote => (isa => 'Epitafio::DB::Lote', is => 'rw', required => 1);
+
 __PACKAGE__->belongs_to('lote', 'Epitafio::DB::Lote',
                         { 'foreign.id_lote' => 'self.id_lote' });
 
-__PACKAGE__->has_many('obitos', 'Epitafio::DB::ObitoJazigo',
+has obitos => (
+  isa => 'ArrayRef',
+  reader => { get_obitos => sub { [$_[0]->obitos_rs->all] } },
+  writer => 'set_obitos',
+  required => 1
+);
+
+__PACKAGE__->has_many('obitos_jazigo', 'Epitafio::DB::ObitoJazigo',
                         { 'foreign.id_jazigo' => 'self.id_jazigo' });
+
+__PACKAGE__->many_to_many(obitos => obitos_jazigo => 'obito');
+
+has sepultamentos => (
+  isa => 'ArrayRef',
+  reader => { get_sepultamentos => sub { [$_[0]->sepultamentos_rs->all] } }
+);
 
 __PACKAGE__->has_many('sepultamentos', 'Epitafio::DB::Sepultamento',
                         { 'foreign.id_jazigo' => 'self.id_jazigo' });
+
+has autor => (
+  isa => 'Epitafio::DB::Usuario',
+  is => 'rw',
+  required => 1
+);
 
 __PACKAGE__->belongs_to('autor', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.au_usr' });

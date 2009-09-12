@@ -19,9 +19,9 @@ package Epitafio::DB::Usuario;
 # título "LICENCA.txt", junto com este programa, se não, escreva para a
 # Fundação do Software Livre(FSF) Inc., 51 Franklin St, Fifth Floor,
 
-use strict;
-use warnings;
-use base qw(DBIx::Class);
+use Reaction::Class;
+BEGIN { extends 'DBIx::Class' }
+use namespace::autoclean;
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime PK::Auto Core));
 __PACKAGE__->table('usuario');
@@ -48,38 +48,98 @@ __PACKAGE__->add_columns
 
 __PACKAGE__->set_primary_key(qw(matricula));
 
+has funcoes => (
+    isa => 'ArrayRef',
+    reader => { get_funcoes => sub {[$_[0]->funcoes_rs->all]} }
+);
+
 __PACKAGE__->has_many('funcoes', 'Epitafio::DB::UsuarioFuncao',
                         { 'foreign.matricula' => 'self.matricula' });
+
+has reg_cemiterios => (
+    isa => 'ArrayRef',
+    reader => { get_reg_cemiterios => sub {[$_[0]->reg_cemiterios_rs->all]} }
+);
 
 __PACKAGE__->has_many('reg_cemiterios', 'Epitafio::DB::Cemiterio',
                         { 'foreign.au_usr' => 'self.matricula' });
 
+has reg_quadras => (
+    isa => 'ArrayRef',
+    reader => { get_reg_quadras => sub {[$_[0]->reg_quadras_rs->all]} }
+);
+
 __PACKAGE__->has_many('reg_quadras', 'Epitafio::DB::Quadra',
                         { 'foreign.au_usr' => 'self.matricula' });
+
+has reg_lotes => (
+    isa => 'ArrayRef',
+    reader => { get_reg_lotes => sub {[$_[0]->reg_lotes_rs->all]} }
+);
 
 __PACKAGE__->has_many('reg_lotes', 'Epitafio::DB::Lote',
                         { 'foreign.au_usr' => 'self.matricula' });
 
+has reg_jazigo => (
+    isa => 'ArrayRef',
+    reader => { get_reg_jazigo => sub {[$_[0]->reg_jazigo_rs->all]} }
+);
+
 __PACKAGE__->has_many('reg_jazigo', 'Epitafio::DB::Jazigo',
                         { 'foreign.au_usr' => 'self.matricula' });
+
+has reg_sepultamento => (
+    isa => 'ArrayRef',
+    reader => { get_reg_sepultamento => sub {[$_[0]->reg_sepultamento_rs->all]} }
+);
 
 __PACKAGE__->has_many('reg_sepultamento', 'Epitafio::DB::Sepultamento',
                         { 'foreign.au_usr' => 'self.matricula' });
 
+has reg_exumacao => (
+    isa => 'ArrayRef',
+    reader => { get_reg_exumacao => sub {[$_[0]->reg_exumacao_rs->all]} }
+);
+
 __PACKAGE__->has_many('reg_exumacao', 'Epitafio::DB::Exumacao',
                         { 'foreign.au_usr' => 'self.matricula' });
+
+has reg_cremacao => (
+    isa => 'ArrayRef',
+    reader => { get_reg_cremacao => sub {[$_[0]->reg_cremacao_rs->all]} }
+);
 
 __PACKAGE__->has_many('reg_cremacao', 'Epitafio::DB::Cremacao',
                         { 'foreign.au_usr' => 'self.matricula' });
 
+has reg_remocao => (
+    isa => 'ArrayRef',
+    reader => { get_reg_remocao => sub {[$_[0]->reg_remocao_rs->all]} }
+);
+
 __PACKAGE__->has_many('reg_remocao', 'Epitafio::DB::Remocao',
                         { 'foreign.au_usr' => 'self.matricula' });
+
+has reg_obitojazigo => (
+    isa => 'ArrayRef',
+    reader => { get_reg_obitojazigo => sub {[$_[0]->reg_obitojazigo_rs->all]} }
+);
 
 __PACKAGE__->has_many('reg_obitojazigo', 'Epitafio::DB::ObitoJazigo',
                         { 'foreign.au_usr' => 'self.matricula' });
 
+has reg_obito => (
+    isa => 'ArrayRef',
+    reader => { get_reg_obito => sub {[$_[0]->reg_obito_rs->all]} }
+);
+
 __PACKAGE__->has_many('reg_obito', 'Epitafio::DB::Obito',
                         { 'foreign.au_usr' => 'self.matricula' });
+
+has reg_usuariofuncao => (
+    isa => 'ArrayRef',
+    reader => { get_reg_usuariofuncao => sub {[$_[0]->reg_usuariofuncao_rs->all]} }
+);
 
 __PACKAGE__->has_many('reg_usuariofuncao', 'Epitafio::DB::UsuarioFuncao',
                         { 'foreign.au_usr' => 'self.matricula' });

@@ -21,6 +21,9 @@ package Epitafio::DB;
 
 use base qw(DBIx::Class::Schema);
 
+# silence DBIC from complaining about our reaction hacks
+$ENV{DBIC_OVERWRITE_HELPER_METHODS_OK} = 1;
+
 __PACKAGE__->load_classes();
 
 1;
