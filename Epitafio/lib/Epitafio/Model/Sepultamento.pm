@@ -221,6 +221,6 @@ txn_method 'desfazer_sepultamento' => authorized 'supervisao' => sub {
                       id_sepultamento_destino => undef });
   }
 
-}
+};
 
 1;

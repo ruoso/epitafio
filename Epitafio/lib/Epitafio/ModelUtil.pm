@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use base 'Exporter';
 
-our @EXPORT = qw(txn_method authorized rs_handled now);
+our @EXPORT = qw(txn_method authorized rs_handled now readonly);
 
 sub now {
   DateTime->now();
@@ -54,7 +54,7 @@ sub authorized {
       if ($_[0]->user->funcoes
           ->find({ tt_ini => { '<=' => $rt },
                    tt_fim => { '>' => $rt },
-                   vt_ini => { '<=' => $rt ],
+                   vt_ini => { '<=' => $rt },
                    vt_fim => { '>' => $rt },
                    codigo => $role,
                    id_cemiterio => undef })) {

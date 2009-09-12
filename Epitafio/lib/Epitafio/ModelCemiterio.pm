@@ -11,6 +11,7 @@ sub build_per_context_instance {
   # se pretende trabalhar, também aproveitamos para ver se o usuário
   # tem alguma ligação com esse cemitério.
   my $id_cemiterio;
+  my $rt = now();
   if ($c->req->param('id_cemiterio')) {
     $id_cemiterio = $c->req->param('id_cemiterio');
   } elsif ($c->session->{id_cemiterio}) {
@@ -29,10 +30,11 @@ sub build_per_context_instance {
                      'cemiterio.tt_ini' => { '<=' => $rt },
                      'cemiterio.tt_fim' => { '>' => $rt },
                      'cemiterio.vt_ini' => { '<=' => $rt },
-                     'cemiterio.vt_fim' => { '>' => $rt }},
+                     'cemiterio.vt_fim' => { '>' => $rt }
+                   },
                    { prefetch => 'cemiterio' })->all;
-    if ((keys %cemiterio) == 1) {
-      ($id_cemiterio) = keys %cemiterio;
+    if ((keys %cemiterios) == 1) {
+      ($id_cemiterio) = keys %cemiterios;
       $c->session->{id_cemiterio} = $id_cemiterio;
     } else {
       die 'É preciso selecionar um cemitério';
@@ -51,3 +53,5 @@ sub build_per_context_instance {
              dbic => $c->model('DB')->schema->restrict_with_object($c->user->obj),
              cemiterio => $cemiterio);
 }
+
+1;
