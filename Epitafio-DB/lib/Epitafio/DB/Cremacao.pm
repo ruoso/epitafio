@@ -119,7 +119,7 @@ has encerrando => (
 );
 
 __PACKAGE__->might_have('encerrando', 'Epitafio::DB::Exumacao',
-                        { 'foreign.id_cremacao_destino' => 'self.id_remocao' });
+                        { 'foreign.id_cremacao_destino' => 'self.id_cremacao' });
 
 has cemiterio => (
     isa => 'Epitafio::DB::Cemiterio',
