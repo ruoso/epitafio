@@ -14,9 +14,11 @@ use Catalyst::Runtime 5.80;
 #                 directory
 
 use parent qw/Catalyst/;
-use Catalyst qw/-Debug
-                ConfigLoader
-                Static::Simple/;
+use Catalyst qw/
+    ConfigLoader
+    Static::Simple
+    Authentication
+/;
 our $VERSION = '0.01';
 
 # Configure the application.
@@ -29,6 +31,22 @@ our $VERSION = '0.01';
 # local deployment.
 
 __PACKAGE__->config( name => 'Epitafio' );
+
+# authentication configuration
+__PACKAGE__->config( 'Plugin::Authentication' => {
+    default => {
+        credential => {
+            class => 'Password',
+            password_field => 'senha',
+            password_type => 'hashed',
+            password_hash_type => 'SHA-1'
+        },
+        store => {
+            class => 'DBIx::Class',
+            user_model => 'DB::Usuario',
+        }
+    }
+});
 
 # Start the application
 __PACKAGE__->setup();
