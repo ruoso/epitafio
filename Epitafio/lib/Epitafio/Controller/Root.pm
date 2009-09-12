@@ -1,14 +1,16 @@
 package Epitafio::Controller::Root;
+use Moose;
+BEGIN { extends 'Reaction::UI::Controller::Root' }
 
-use strict;
-use warnings;
-use parent 'Catalyst::Controller';
+use aliased 'Reaction::UI::ViewPort::Data';
+use aliased 'Reaction::UI::ViewPort::SiteLayout';
 
-#
-# Sets the actions in this controller to be registered with no prefix
-# so they function identically to actions created in MyApp.pm
-#
-__PACKAGE__->config->{namespace} = '';
+# defaults
+__PACKAGE__->config(
+    view_name => 'Site',
+    window_title => 'Epitáfio',
+    namespace => ''
+);
 
 =head1 NAME
 
@@ -16,24 +18,62 @@ Epitafio::Controller::Root - Root Controller for Epitafio
 
 =head1 DESCRIPTION
 
-[enter your description here]
+This controller handles application-wide code for requests.
 
-=head1 METHODS
-
-=cut
-
-=head2 index
+=head1 ACTIONS
 
 =cut
 
-sub index :Path :Args(0) {
-    my ( $self, $c ) = @_;
+=head2 base
 
-    # Hello World
-    $c->response->body( $c->welcome_message );
+Code that runs for every request should be invoked here.
+
+=cut
+
+sub base :Chained('/') PathPart('') CaptureArgs(0) {}
+
+=head2 html
+
+Code that runs for every request that produces a standard html page.
+
+=cut
+
+sub html :Chained('base') PathPart('') CaptureArgs(0) {
+    my($self, $c) = @_;
+    $self->push_viewport(SiteLayout,
+        title => $self->window_title,
+        static_base_uri => "${\$c->uri_for('/static')}",
+        meta_info => {
+            http_header => {
+                'Content-Type' => 'text/html;charset=latin1',
+            }
+        }
+    );
 }
 
-sub default :Path {
+=head2 root
+
+Code that runs for the root (AKA home) page.
+
+=cut
+
+sub root :Chained('html') PathPart('') Args(0) {
+    my($self, $c) = @_;
+    $self->push_viewport(Data,
+        layout => 'index',
+        args => {
+           title => $self->window_title
+        }
+    );
+}
+
+=head2 not_found
+
+Standard 404 error page.
+
+=cut
+
+sub default :Action {
     my ( $self, $c ) = @_;
     $c->response->body( 'Page not found' );
     $c->response->status(404);
@@ -41,11 +81,7 @@ sub default :Path {
 
 =head2 end
 
-Attempt to render a view, if needed.
-
-=cut
-
-sub end : ActionClass('RenderView') {}
+Render the viewport hierarchy. Inherited from Reaction::UI::Controller::Root.
 
 =head1 AUTHOR
 

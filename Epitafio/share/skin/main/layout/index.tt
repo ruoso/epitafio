@@ -1,0 +1,7 @@
+=widget Data
+
+=for layout widget
+
+Bem vindo ao [% title %]
+
+=cut
