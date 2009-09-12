@@ -10,7 +10,7 @@ our $identity;
 package AuthProvider;
 use Moose;
 
-sub login { $identity = Identity->new(name => 'John Doe') }
+sub authenticate { $identity = Identity->new(name => 'John Doe') }
 
 package Identity;
 use Moose;
@@ -29,16 +29,16 @@ my $userbar = UserBar->new(
     authentication_provider => AuthProvider->new
 );
 
-is_deeply([$userbar->current_events], [qw(login help contact)]);
+is_deeply([$userbar->current_events], [qw(authenticate help contact)]);
 
 # we should no-op if we don't have a user
 ok(!$userbar->logout);
 ok(!$userbar->name);
 
-$userbar->login;
+$userbar->authenticate;
 $userbar->identity($identity);
 
-is_deeply([$userbar->current_events], [qw(logout login help contact)]);
+is_deeply([$userbar->current_events], [qw(logout authenticate help contact)]);
 
 is($userbar->name, 'John Doe');
 ok($userbar->logout);
@@ -48,4 +48,4 @@ ok(!$userbar->identity);
 ok(!$userbar->logout);
 ok(!$userbar->name);
 
-is_deeply([$userbar->current_events], [qw(login help contact)]);
+is_deeply([$userbar->current_events], [qw(authenticate help contact)]);

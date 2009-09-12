@@ -6,10 +6,10 @@ extends 'Reaction::UI::ViewPort';
 use Moose::Util::TypeConstraints qw(duck_type);
 
 has authentication_provider => (
-    isa => duck_type([qw(login)]),
+    isa => duck_type([qw(authenticate)]),
     is => 'rw',
     required => 1,
-    handles => [qw(login)]
+    handles => [qw(authenticate)]
 );
 
 has identity => (
@@ -39,7 +39,7 @@ sub name {
 
 sub current_events {
     my($self) = @_;
-    my @events = qw(login help contact); # always display help and contact
+    my @events = qw(authenticate help contact); # always display help and contact
     unshift @events, 'logout' if $self->has_identity;
     return @events;
 }
