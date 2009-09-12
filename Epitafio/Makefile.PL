@@ -13,6 +13,11 @@ requires 'Catalyst::Action::RenderView';
 requires 'parent';
 requires 'Config::General'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats
+requires 'Catalyst::Model::DBIC::Schema';
+requires 'Catalyst::Plugin::Authentication';
+requires 'Catalyst::Authentication::Store::DBIx::Class';
+requires 'Catalyst::Authentication::Credential::Password';
+
 catalyst;
 
 install_script glob('script/*.pl');
