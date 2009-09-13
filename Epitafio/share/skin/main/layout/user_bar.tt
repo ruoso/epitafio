@@ -1,0 +1,13 @@
+=for layout widget
+
+[% links %]
+
+=for layout links
+
+<ul>[% call_next %]</ul>
+
+=for layout link
+
+<li><a href="[% uri %]">[% label %]</a></li>
+
+=cut

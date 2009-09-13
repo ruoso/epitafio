@@ -1,0 +1,6 @@
+=for layout widget
+
+[% header %]
+[% inner %]
+
+=cut

@@ -1,0 +1,5 @@
+=for layout widget
+
+[% userbar %]
+
+=cut
