@@ -18,6 +18,8 @@ requires 'Catalyst::Plugin::Authentication';
 requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'Catalyst::Authentication::Credential::Password';
 
+requires 'Config::JFDI';
+
 catalyst;
 
 install_script glob('script/*.pl');
