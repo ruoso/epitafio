@@ -18,7 +18,7 @@ sub authenticate {
     );
 }
 
-sub login :Chained('/html') Args(0) {
+sub login :Chained('/') Args(0) {
     my($self, $c) = @_;
 
     # create closure for invoking on_login after we've been authenticated

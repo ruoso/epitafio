@@ -30,7 +30,13 @@ Code that runs for every request should be invoked here.
 
 =cut
 
-sub base :Chained('/') PathPart('') CaptureArgs(0) {}
+sub base :Chained('/') PathPart('') CaptureArgs(0) {
+  my ($self, $c) = @_;
+  unless ($c->user) {
+    $c->res->redirect('/login');
+    $c->detach;
+  }
+}
 
 =head2 html
 
