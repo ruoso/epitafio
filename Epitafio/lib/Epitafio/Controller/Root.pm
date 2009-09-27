@@ -51,22 +51,6 @@ sub html :Chained('base') PathPart('') CaptureArgs(0) {
     );
 }
 
-=head2 root
-
-Code that runs for the root (AKA home) page.
-
-=cut
-
-sub root :Chained('html') PathPart('') Args(0) {
-    my($self, $c) = @_;
-    $self->push_viewport(Data,
-        layout => 'index',
-        args => {
-           title => $self->window_title
-        }
-    );
-}
-
 =head2 not_found
 
 Standard 404 error page.
