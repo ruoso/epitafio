@@ -21,7 +21,9 @@ cemitério.
 =cut
 
 sub base :Chained('/base') :Pathpart('') :CaptureArgs(1) {
-  my ($self, $id_cemiterio) = @_;
+  my ($self, $c, $id_cemiterio) = @_;
+
+  my $rt = DateTime->now();
 
   $c->stash->{cemiterio} = $c->model('DB::Cemiterio')
     ->find({ id_cemiterio => $id_cemiterio,
@@ -31,6 +33,15 @@ sub base :Chained('/base') :Pathpart('') :CaptureArgs(1) {
              vt_fim => { '>' => $rt }})
       or die 'Cemiterio não encontrado';
 
+}
+
+=head2 intro
+
+Esta é a tela de introdução a um cemitério em específico.
+
+=cut
+
+sub intro :Chained('base') :PathPart('') :Args(0) {
 }
 
 1;

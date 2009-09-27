@@ -1,4 +1,4 @@
-package Epitafio::Model::Obito;
+package Epitafio::Model::Cemiterios;
 use Epitafio::ModelUtil;
 use Moose;
 use utf8;
@@ -22,11 +22,11 @@ txn_method 'listar_cemiterios_usuario' => sub {
     ({ 'me.tt_ini' => { '<=' => $ref_time },
        'me.tt_fim' => { '>' => $ref_time },
        'me.vt_ini' => { '<=' => $ref_time },
-       'me.vt_fim' => { '>' => $ref_time }
+       'me.vt_fim' => { '>' => $ref_time },
        'usuarios.tt_ini' => { '<=' => $ref_time },
        'usuarios.tt_fim' => { '>' => $ref_time },
        'usuarios.vt_ini' => { '<=' => $ref_time },
-       'usuarios.vt_fim' => { '>' => $ref_time }
+       'usuarios.vt_fim' => { '>' => $ref_time },
        'usuarios.matricula' => $self->user->matricula },
      { join => 'usuarios' })->all;
 
