@@ -46,7 +46,7 @@ __PACKAGE__->add_columns
    },
    au_usr =>
    {
-    data_type => 'char(15)',
+    data_type => 'varchar(15)',
    },
    id_cemiterio =>
    {
@@ -58,7 +58,7 @@ __PACKAGE__->add_columns
    },
    matr_responsavel =>
    {
-    data_type => 'char(15)',
+    data_type => 'varchar(15)',
    },
    id_sepultamento_origem =>
    {
@@ -82,7 +82,7 @@ __PACKAGE__->add_columns
   );
 
 
-__PACKAGE__->set_primary_key(qw(id_exumacao tt_ini));
+__PACKAGE__->set_primary_key(qw(id_exumacao tt_ini tt_fim));
 
 has obito => (
     isa => 'Epitafio::DB::Obito',

@@ -29,7 +29,7 @@ __PACKAGE__->add_columns
   (
    codigo =>
    {
-    data_type => 'char(20)',
+    data_type => 'varchar(20)',
    },
    descricao =>
    {

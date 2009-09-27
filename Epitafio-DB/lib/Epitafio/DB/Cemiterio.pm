@@ -50,7 +50,7 @@ __PACKAGE__->add_columns
    },
    au_usr =>
    {
-    data_type => 'char(15)',
+    data_type => 'varchar(15)',
    },
    razao_social =>
    {
@@ -58,7 +58,7 @@ __PACKAGE__->add_columns
    },
    cnpj =>
    {
-    data_type => 'integer(14)',
+    data_type => 'varchar(14)',
    },
    nome =>
    {
@@ -70,7 +70,7 @@ __PACKAGE__->add_columns
    },
    responsavel_matr =>
    {
-    data_type => 'char(15)',
+    data_type => 'varchar(15)',
    },
    responsavel_nome =>
    {
@@ -78,7 +78,7 @@ __PACKAGE__->add_columns
    },
    responsavel_cpf =>
    {
-    data_type => 'char(11)',
+    data_type => 'varchar(11)',
    },
   );
 
@@ -86,7 +86,7 @@ sub display_name {
   shift->nome
 }
 
-__PACKAGE__->set_primary_key(qw(id_cemiterio vt_ini tt_ini));
+__PACKAGE__->set_primary_key(qw(id_cemiterio vt_ini vt_fim tt_ini tt_fim));
 
 has quadras => (
     isa => 'ArrayRef',

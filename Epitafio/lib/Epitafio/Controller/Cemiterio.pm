@@ -75,7 +75,8 @@ sub sepultar :Chained('/cemiterio/base') PathPart Args(0) {
     ( Action,
       model => RegistrarSepultamento->new
       ( target_model => $c->model('Sepultamento'),
-        model_obitos => $c->model('Obitos')));
+        model_obitos => $c->model('Obito')),
+      field_order => [qw(obito jazigo vt_reg)]);
 }
 
 1;

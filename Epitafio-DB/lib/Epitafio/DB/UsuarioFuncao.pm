@@ -29,11 +29,11 @@ __PACKAGE__->add_columns
   (
    matricula =>
    {
-    data_type => 'char(15)',
+    data_type => 'varchar(15)',
    },
    codigo =>
    {
-    data_type => 'char(20)',
+    data_type => 'varchar(20)',
    },
    id_cemiterio =>
    {
@@ -58,12 +58,12 @@ __PACKAGE__->add_columns
    },
    au_usr =>
    {
-    data_type => 'char(15)',
+    data_type => 'varchar(15)',
    }
   );
 
 
-__PACKAGE__->set_primary_key(qw(matricula codigo id_cemiterio vt_ini tt_ini));
+__PACKAGE__->set_primary_key(qw(matricula codigo id_cemiterio vt_ini vt_fim tt_ini tt_fim));
 
 __PACKAGE__->belongs_to('usuario', 'Epitafio::DB::Usuario',
                         { 'foreign.matricula' => 'self.matricula' });

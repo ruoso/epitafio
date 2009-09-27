@@ -6,14 +6,12 @@ use DateTime;
 
 has model_obitos =>
   ( is => 'ro',
-    metaclass => 'Reaction::Meta::Attribute',
-    handles =>
-    { jazigos_validos => 'jazigos_disponiveis' });
+    metaclass => 'Reaction::Meta::Attribute' );
 
 has obito =>
   ( isa => 'Epitafio::DB::Obito', is => 'rw',
     required => 1, lazy_fail => 1,
-    valid_values => sub { shift->obitos_validos });
+    valid_values => sub { shift->model_obitos->listar_obitos_em_aberto });
 
 has jazigo =>
   ( isa => 'Epitafio::DB::Jazigo', is => 'rw',
