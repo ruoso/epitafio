@@ -4,13 +4,6 @@ use namespace::autoclean;
 extends 'Reaction::InterfaceModel::Action';
 use Reaction::Types::Core qw(DateTime);
 
-has model_sepultamento =>
-  ( is => 'ro',
-    metaclass => 'Reaction::Meta::Attribute',
-    handles =>
-    { obitos_validos => 'listar_obitos_em_aberto' },
-  );
-
 has model_obitos =>
   ( is => 'ro',
     metaclass => 'Reaction::Meta::Attribute',
@@ -25,13 +18,13 @@ has obito =>
 has jazigo =>
   ( isa => 'DB::Jazigo', is => 'rw',
     required => 1, lazy_fail => 1,
-    valid_values => sub { shift->jazigos_validos });
+    valid_values => sub { shift->target_model->jazigos_validos });
 
 has vt_reg => (isa => DateTime, is => 'rw', lazy_fail => 1);
 
 sub do_apply  {
   my ($self) = @_;
-  $self->model_sepultamento->sepultar
+  $self->target_model->sepultar
     ({ id_obito => $self->obito->id_obito,
        id_jazigo => $self->jazigo->id_jazigo,
        vt_reg => $self->vt_reg });
