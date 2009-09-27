@@ -82,6 +82,9 @@ __PACKAGE__->add_columns
    },
   );
 
+sub display_name {
+  shift->nome
+}
 
 __PACKAGE__->set_primary_key(qw(id_cemiterio vt_ini tt_ini));
 

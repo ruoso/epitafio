@@ -14,11 +14,15 @@ use Catalyst::Runtime 5.80;
 #                 directory
 
 use parent qw/Catalyst/;
-use Catalyst qw/
-    ConfigLoader
-    Static::Simple
-    Authentication
-/;
+use Catalyst
+  qw/ -Debug
+      ConfigLoader
+      Static::Simple
+      Authentication
+      Session
+      Session::Store::FastMmap
+      Session::State::Cookie
+    /;
 our $VERSION = '0.01';
 
 # Configure the application.
@@ -39,7 +43,7 @@ __PACKAGE__->config( 'Plugin::Authentication' => {
             class => 'Password',
             password_field => 'senha',
             password_type => 'hashed',
-            password_hash_type => 'SHA-1'
+            password_hash_type => 'MD5'
         },
         store => {
             class => 'DBIx::Class',

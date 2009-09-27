@@ -2,7 +2,7 @@ package Epitafio::IM::Action::Sepultamento::RegistrarSepultamento;
 use Reaction::Class;
 use namespace::autoclean;
 extends 'Reaction::InterfaceModel::Action';
-use Reaction::Types::Core qw(DateTime);
+use DateTime;
 
 has model_obitos =>
   ( is => 'ro',
@@ -11,16 +11,16 @@ has model_obitos =>
     { jazigos_validos => 'jazigos_disponiveis' });
 
 has obito =>
-  ( isa => 'DB::Obito', is => 'rw',
+  ( isa => 'Epitafio::DB::Obito', is => 'rw',
     required => 1, lazy_fail => 1,
     valid_values => sub { shift->obitos_validos });
 
 has jazigo =>
-  ( isa => 'DB::Jazigo', is => 'rw',
+  ( isa => 'Epitafio::DB::Jazigo', is => 'rw',
     required => 1, lazy_fail => 1,
-    valid_values => sub { shift->target_model->jazigos_validos });
+    valid_values => sub { shift->target_model->jazigos_disponiveis });
 
-has vt_reg => (isa => DateTime, is => 'rw', lazy_fail => 1);
+has vt_reg => (isa => 'DateTime', is => 'rw', lazy_fail => 1);
 
 sub do_apply  {
   my ($self) = @_;
