@@ -12,7 +12,7 @@ Se veio aqui, precisa escolher um cemitério para poder seguir adiante.
 
 =cut
 
-sub root :Chained('/base') PathPart('') Args(0) {
+sub root :Chained('/auth/base') PathPart('') Args(0) {
   my ($self, $c) = @_;
 
   my $cb = $self->make_context_closure
@@ -34,7 +34,7 @@ cemitério.
 
 =cut
 
-sub base :Chained('/base') :Pathpart('') :CaptureArgs(1) {
+sub base :Chained('/auth/base') :Pathpart('') :CaptureArgs(1) {
   my ($self, $c, $id_cemiterio) = @_;
 
   my $rt = DateTime->now();
