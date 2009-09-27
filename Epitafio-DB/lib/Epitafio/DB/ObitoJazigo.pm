@@ -53,12 +53,12 @@ __PACKAGE__->add_columns
    },
    au_usr =>
    {
-    data_type => 'char(15)',
+    data_type => 'varchar(15)',
    },
   );
 
 
-__PACKAGE__->set_primary_key(qw(id_obito id_jazigo vt_ini tt_ini));
+__PACKAGE__->set_primary_key(qw(id_obito id_jazigo vt_ini vt_fim tt_ini tt_fim));
 
 __PACKAGE__->belongs_to('jazigo', 'Epitafio::DB::Jazigo',
                         { 'foreign.id_jazigo' => 'self.id_jazigo' });

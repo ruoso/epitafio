@@ -50,7 +50,7 @@ __PACKAGE__->add_columns
    },
    au_usr =>
    {
-    data_type => 'char(15)',
+    data_type => 'varchar(15)',
    },
    id_lote =>
    {
@@ -67,7 +67,7 @@ __PACKAGE__->add_columns
   );
 
 
-__PACKAGE__->set_primary_key(qw(id_jazigo vt_ini tt_ini));
+__PACKAGE__->set_primary_key(qw(id_jazigo vt_ini vt_fim tt_ini tt_fim));
 
 has lote => (isa => 'Epitafio::DB::Lote', is => 'rw', required => 1);
 

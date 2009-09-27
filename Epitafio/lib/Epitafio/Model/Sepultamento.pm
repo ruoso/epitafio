@@ -128,8 +128,8 @@ txn_method 'jazigos_disponiveis' => readonly authorized 'operacao' => sub {
        'me.tt_fim' => { '>' => $ref_time },
        'me.vt_ini' => { '<=' => $ref_time },
        'me.vt_fim' => { '>' => $ref_time },
-       'obitos.tt_ini' => { '<=' => $ref_time },
-       'obitos.tt_fim' => { '>' => $ref_time },
+       'obitos_jazigo.tt_ini' => { '<=' => $ref_time },
+       'obitos_jazigo.tt_fim' => { '>' => $ref_time },
        'lote.tt_ini' => { '<=' => $ref_time },
        'lote.tt_fim' => { '>' => $ref_time },
        'lote.vt_ini' => { '<=' => $ref_time },
@@ -143,14 +143,14 @@ txn_method 'jazigos_disponiveis' => readonly authorized 'operacao' => sub {
        'cemiterio.vt_ini' => { '<=' => $ref_time },
        'cemiterio.vt_fim' => { '>' => $ref_time },
        'cemiterio.id_cemiterio' => $self->cemiterio->id_cemiterio, },
-     { join => ['obitos',{ lote => { quadra => 'cemiterio' }}],
-       group_by => [qw(id_jazigo vt_ini vt_fim tt_ini tt_fim
-                       au_usr id_lote identificador tipo)],
-       '+select' => [\"MAX(CASE WHEN obitos.vt_fim IS NULL THEN -1 ELSE obitos.vt_fim END)"],
+     { join => ['obitos_jazigo',{ lote => { quadra => 'cemiterio' }}],
+       group_by => [qw(me.id_jazigo me.vt_ini me.vt_fim me.tt_ini me.tt_fim
+                       me.au_usr me.id_lote me.identificador me.tipo)],
+       '+select' => [\"MAX(CASE WHEN obitos_jazigo.vt_fim IS NULL THEN '-infinity' ELSE obitos_jazigo.vt_fim END)"],
        '+as' => ['ultimo_sepultamento'],
-       'order_by' => 'ultimo_sepultamento',
+       'order_by' => \"MAX(CASE WHEN obitos_jazigo.vt_fim IS NULL THEN '-infinity' ELSE obitos_jazigo.vt_fim END)",
        'rows' => 10,
-     })->all;
+     });
 
 };
 

@@ -23,7 +23,7 @@ txn_method 'listar_obitos_em_aberto' => authorized 'operacao' => sub {
     ({ 'me.tt_ini' => { '<=' => $ref_time },
        'me.tt_fim' => { '>' => $ref_time },
        'me.vt_reg' => { '<=' => $ref_time },
-       'me.id_cemiterio' => { $self->cemiterio->id_cemiterio },
+       'me.id_cemiterio' => $self->cemiterio->id_cemiterio,
        'remocoes.id_remocao' => undef,
        'remocoes.tt_ini' => { '<=' => $ref_time },
        'remocoes.tt_fim' => { '>' => $ref_time },
@@ -32,14 +32,14 @@ txn_method 'listar_obitos_em_aberto' => authorized 'operacao' => sub {
        'cremacoes.tt_ini' => { '<=' => $ref_time },
        'cremacoes.tt_fim' => { '>' => $ref_time },
        'cremacoes.vt_reg' => { '<=' => $ref_time },
-       'obitos_jazigo.id_jazigo' => undef },
+       'obitos_jazigo.id_jazigo' => undef,
        'obitos_jazigo.tt_ini' => { '<=' => $ref_time },
        'obitos_jazigo.tt_fim' => { '>' => $ref_time },
        'obitos_jazigo.vt_ini' => { '<=' => $ref_time },
-       'obitos_jazigo.vt_fim' => { '>' => $ref_time },
+       'obitos_jazigo.vt_fim' => { '>' => $ref_time }},
      { join => ['remocoes','cremacoes','obitos_jazigo'],
        'order_by' => 'nome',
-     })->all;
+     });
 
 };
 

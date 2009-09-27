@@ -46,7 +46,7 @@ sub authorized {
                    codigo => $role })) {
         $code->(@_);
       } else {
-        die 'Access Denied!';
+        die 'Access Denied! {'.$role.'}';
       }
     } else {
       # as roles que não são específicas a cemitério devem ser
@@ -60,7 +60,7 @@ sub authorized {
                    id_cemiterio => undef })) {
         $code->(@_);
       } else {
-        die 'Access Denied!';
+        die 'Access Denied! {'.$role.'}';
       }
     }
   }

@@ -29,7 +29,7 @@ __PACKAGE__->add_columns
   (
    matricula =>
    {
-    data_type => 'char(15)',
+    data_type => 'varchar(15)',
    },
    nome =>
    {

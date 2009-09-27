@@ -28,7 +28,7 @@ txn_method 'listar_cemiterios_usuario' => sub {
        'usuarios.vt_ini' => { '<=' => $ref_time },
        'usuarios.vt_fim' => { '>' => $ref_time },
        'usuarios.matricula' => $self->user->matricula },
-     { join => 'usuarios' })->all;
+     { join => 'usuarios' });
 
 };
 

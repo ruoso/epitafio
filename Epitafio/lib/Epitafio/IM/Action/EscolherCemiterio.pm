@@ -8,4 +8,6 @@ has cemiterio =>
     required => 1, lazy_fail => 1,
     valid_values => sub { shift->target_model->listar_cemiterios_usuario });
 
+sub do_apply {1}
+
 1;

@@ -31,30 +31,6 @@ Code that runs for every request should be invoked here.
 =cut
 
 sub base :Chained('/') PathPart('') CaptureArgs(0) {
-  my ($self, $c) = @_;
-  unless ($c->user) {
-    $c->res->redirect('/login');
-    $c->detach;
-  }
-}
-
-=head2 html
-
-Code that runs for every request that produces a standard html page.
-
-=cut
-
-sub html :Chained('base') PathPart('') CaptureArgs(0) {
-    my($self, $c) = @_;
-    $self->push_viewport(SiteLayout,
-        title => $self->window_title,
-        static_base_uri => "${\$c->uri_for('/static')}",
-        meta_info => {
-            http_header => {
-                'Content-Type' => 'text/html;charset=latin1',
-            }
-        }
-    );
 }
 
 =head2 not_found

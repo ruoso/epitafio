@@ -46,7 +46,7 @@ __PACKAGE__->add_columns
    },
    au_usr =>
    {
-    data_type => 'char(15)',
+    data_type => 'varchar(15)',
    },
    id_cemiterio =>
    {
@@ -66,7 +66,7 @@ __PACKAGE__->add_columns
    },
    cpf =>
    {
-    data_type => 'char(11)',
+    data_type => 'varchar(11)',
    },
    endereco =>
    {
@@ -74,7 +74,7 @@ __PACKAGE__->add_columns
    },
    cep =>
    {
-    data_type => 'char(8)',
+    data_type => 'varchar(8)',
    },
    profissao =>
    {
@@ -111,7 +111,7 @@ __PACKAGE__->add_columns
   );
 
 
-__PACKAGE__->set_primary_key(qw(id_obito tt_ini));
+__PACKAGE__->set_primary_key(qw(id_obito tt_ini tt_fim));
 
 has jazigos => (
   isa => 'ArrayRef',
