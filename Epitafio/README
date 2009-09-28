@@ -1,1 +1,41 @@
-Run script/epitafio_server.pl to test the application.
+Epitáfio
+========
+Esta é a distribuição do gestor de cemitérios públicos Epitáfio.
+
+Para implantar o banco de dados utilizado pela aplicação:
+
+1 - Configure a conexão ao banco no arquivo epitafio.conf
+
+Para conexão com um banco de dados PostgreSQL:
+
+<Model::DB>
+ <connect_info>
+  dsn   dbi:Pg:dbname=nomedobanco
+  user  seunome
+  password suasenha 
+ </connect_info>
+</Model::DB>
+
+Substitua os valores "nomebanco", "seunome" e "suasenha" pelos valores
+apropriados. Consulte http://www.postgresql.org/docs/ para obter informações
+a respeito de como implantar e gerenciar bancos de dados PostgreSQL.
+
+Para conexão com um banco de dados SQLite:
+
+<Model::DB>
+ <connect_info>
+  dsn   dbi:SQLite:nomedobanco
+ </connect_info>
+</Model::DB>
+
+Substitua o valor "nomedobanco" por um valor apropriado. Não é necessário
+pré-configurar o banco de dados, a etapa de implantação irá criar o arquivo de
+banco de dados automaticamente.
+
+2 - Implante o banco de dados e crie o usuário inicial
+
+script/epitafio_schema_deploy.pl
+
+3 - Executando a aplicação em modo stand-alone
+
+script/epitafio_server.pl
