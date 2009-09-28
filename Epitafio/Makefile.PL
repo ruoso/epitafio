@@ -19,6 +19,7 @@ requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'Catalyst::Authentication::Credential::Password';
 
 requires 'Config::JFDI';
+requires 'Term::ReadPassword';
 
 catalyst;
 
