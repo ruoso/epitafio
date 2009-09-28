@@ -35,15 +35,19 @@ has _senha_confirmada => (
 sub adopt_senha { shift->clear__senha_confirmada }
 sub adopt_confirmar_senha { shift->clear__senha_confirmada }
 
+sub senha_confirmada { shift->_senha_confirmada }
+
 after sync_all => sub {
   my($self) = @_;
-  $self->_senha_confirmada(1) if $self->senha eq $self->confirmar_senha;
+  $self->_senha_confirmada(1) if
+    $self->has_senha && $self->has_confirmar_senha
+     && ($self->senha eq $self->confirmar_senha);
 };
 
 around can_apply => sub {
   my $orig = shift;
   my $self = shift;
-  return $self->$orig(@_) && $self->_senha_confirmada
+  return $self->$orig(@_) && $self->senha_confirmada
 };
 
 around parameter_hashref => sub {

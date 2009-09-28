@@ -32,4 +32,14 @@ has ativo => (
   default => 1
 );
 
+around error_for_attribute => sub {
+  my $orig  = shift;
+  my $self  = shift;
+  my($attr) = @_;
+  my $attr_name = $attr->name;
+  return $self->$orig(@_) unless $attr->name =~ /^senha|confirma_senha$/;
+  return 'confirmação da senha não confere' unless $self->senha_confirmada;
+  $self->$orig(@_);
+};
+
 1;

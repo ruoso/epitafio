@@ -44,7 +44,8 @@ around parameter_hashref => sub {
   my $orig = shift;
   my $self = shift;
   my $p_hash = $self->$orig(@_);
-  $p_hash->{senha} = $self->criptografar_senha($p_hash->{senha});
+  $p_hash->{senha} = $self->criptografar_senha($p_hash->{senha})
+    if exists $p_hash->{senha};
   return $p_hash;
 };
 
