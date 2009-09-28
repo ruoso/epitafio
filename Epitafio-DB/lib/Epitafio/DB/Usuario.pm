@@ -21,7 +21,15 @@ package Epitafio::DB::Usuario;
 
 use Reaction::Class;
 BEGIN { extends 'DBIx::Class' }
+use Epitafio::Types::Usuario qw(Matricula);
+use Reaction::Types::Core qw(SimpleStr Password);
+use MooseX::Types::Moose qw(Bool);
 use namespace::autoclean;
+
+has matricula => (isa => Matricula, is => 'rw', required => 1);
+has nome      => (isa => SimpleStr, is => 'rw', required => 1);
+has senha     => (isa => Password, is => 'rw', required => 1);
+has ativo     => (isa => Bool, is => 'rw', required => 1);
 
 __PACKAGE__->load_components(qw(InflateColumn::DateTime PK::Auto Core));
 __PACKAGE__->table('usuario');
@@ -44,7 +52,6 @@ __PACKAGE__->add_columns
     data_type => 'boolean',
    },
   );
-
 
 __PACKAGE__->set_primary_key(qw(matricula));
 
