@@ -21,8 +21,30 @@ requires 'Catalyst::Authentication::Credential::Password';
 requires 'Config::JFDI';
 requires 'Term::ReadPassword';
 
+features(
+  'Suporte a SQLite' => [
+    '-default' => 1,
+    [qw/DBD::SQLite/]
+  ],
+  'Suport a PostgreSQL' => [
+    '-default' => 0,
+    [qw/DBD::Pg/]
+  ]
+);
+
 catalyst;
 
 install_script glob('script/*.pl');
 auto_install;
 WriteAll;
+
+print <<EOF
+Essa distribuição requer a instalação de uma versão do Reaction que ainda não
+foi submetida ao CPAN:
+
+svn co http://code2.0beta.co.uk/reaction/svn/Reaction/0.001/trunk reaction
+cd reaction
+perl Makefile.PL
+make test && make install
+
+EOF
